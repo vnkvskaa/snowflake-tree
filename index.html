@@ -3070,12 +3070,14 @@ function thxMorph(fn){thxSwap(fn)}
   render();
   function go(){}
 
-  function enter(){intro.hidden=true;app.inert=false;var f=document.querySelector('.dock .primary');if(f)f.focus()}
+  function seen(set){try{if(set)localStorage.setItem('uzorIntroSeen','1');return localStorage.getItem('uzorIntroSeen')==='1'}catch(e){return false}}
+  function enter(){seen(true);intro.hidden=true;app.inert=false;var f=document.querySelector('.dock .primary');if(f)f.focus()}
   (function(){if(!window.IntersectionObserver)return;var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.style.visibility=e.isIntersecting?'visible':'hidden'})},{root:intro,rootMargin:'50px'});['walk','arcs'].forEach(function(id){var n=document.getElementById(id);if(n)io.observe(n)})})();
   $('enter').addEventListener('click',function(){if(reduce){enter();return}intro.classList.add('leaving');setTimeout(enter,900)});
   // стартовая страница сохранена, но пока скрыта на время доработок. Вернуть: SHOW_INTRO=true (или открыть ссылку с #intro)
-  var SHOW_INTRO=true;
-  if(!SHOW_INTRO&&!/intro/.test(location.hash+location.search)){intro.hidden=true;app.inert=false}
+  var SHOW_INTRO=!seen();
+  if(/intro/.test(location.hash+location.search))SHOW_INTRO=true;
+  if(!SHOW_INTRO){intro.hidden=true;app.inert=false}
 
 
   // постоянный снег: плоские неровные хлопья без контуров и теней, редкие и неяркие
